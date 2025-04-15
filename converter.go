@@ -4,18 +4,32 @@ import (
 	"fmt"
 	"strings"
 
+	hxhelpers "github.com/TudorHulban/hx-core/helpers"
 	"golang.org/x/net/html"
 )
 
 var nodeProcessorMap = map[string]NodeFunc{
 	"a":    processAnchor,
+	"div":  processDiv,
+	"h1":   processH1,
+	"h2":   processH2,
+	"h3":   processH3,
+	"h4":   processH4,
+	"h5":   processH5,
+	"h6":   processH6,
+	"img":  processImg,
 	"ol":   processOrderedList,
+	"p":    processP,
 	"li":   processListItem,
 	"nav":  processNav,
 	"span": processSpan,
 }
 
 func traverseAST(node *html.Node) []string {
+	if node == nil {
+		return nil
+	}
+
 	var result []string
 
 	switch node.Type {
@@ -23,7 +37,12 @@ func traverseAST(node *html.Node) []string {
 		if processFunc, exists := nodeProcessorMap[node.Data]; exists {
 			nodeContent := processFunc(node)
 
-			var childrenContent []string
+			childCount := 0
+			for child := node.FirstChild; child != nil; child = child.NextSibling {
+				childCount++
+			}
+
+			childrenContent := make([]string, 0, childCount)
 
 			// Recursively process children and inject into the current node
 			for child := node.FirstChild; child != nil; child = child.NextSibling {
@@ -59,30 +78,55 @@ func traverseAST(node *html.Node) []string {
 		}
 
 	case html.TextNode:
-		// Handle text nodes if needed (e.g., add to the result)
+		replacer := strings.NewReplacer("\n", "", "\t", "")
+
+		if strings.TrimSpace(node.Data) != "" {
+			result = append(
+				result,
+				hxhelpers.Sprintf(
+					"\n"+`%s.Text("%s"),`,
+
+					_PackagePrimitives,
+					replacer.Replace(node.Data),
+				),
+			)
+		}
 
 	case html.DocumentNode:
-		// Recursively process document children
 		for child := node.FirstChild; child != nil; child = child.NextSibling {
-			result = append(result, traverseAST(child)...)
+			result = append(
+				result,
+				traverseAST(child)...,
+			)
 		}
+
+	case html.DoctypeNode:
+		result = append(
+			result,
+			hxhelpers.Sprintf(
+				"<!DOCTYPE %s>",
+				node.Data,
+			),
+		)
+
+	case html.CommentNode:
+		result = append(
+			result,
+			hxhelpers.Sprintf(
+				"<!-- %s -->",
+				node.Data,
+			),
+		)
 
 	default:
 		// Non-element nodes can be ignored or logged
-		fmt.Println("Encountered non-element node:", node.Type)
+		fmt.Printf(
+			"Encountered non-element node: %v (%s).\n",
+
+			node.Type,
+			node.Data,
+		)
 	}
 
 	return result
-}
-
-func extractText(node *html.Node) string {
-	if node.Type == html.TextNode {
-		return node.Data
-	}
-
-	if node.FirstChild != nil {
-		return extractText(node.FirstChild)
-	}
-
-	return ""
 }

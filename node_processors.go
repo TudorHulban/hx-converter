@@ -1,63 +1,116 @@
 package hxconverter
 
 import (
-	"strings"
-
 	hxhelpers "github.com/TudorHulban/hx-core/helpers"
 	"golang.org/x/net/html"
 )
 
-func processAnchor(node *html.Node) string {
+func processElement(elName string, node *html.Node) string {
 	return hxhelpers.Sprintf(
-		"\nhx.A(\n%s ,\nhx.Text(%s),\n)\n",
+		"\n%s.%s(\n%s,\n),",
 
+		_PackagePrimitives,
+		elName,
 		mapNodesAttributes(
 			extractAttributes(node),
 		),
-		`"`+strings.TrimSpace(extractText(node))+`"`,
+	)
+}
+
+func processAnchor(node *html.Node) string {
+	return processElement(
+		"A",
+		node,
+	)
+}
+
+func processDiv(node *html.Node) string {
+	return processElement(
+		"Div",
+		node,
+	)
+}
+
+func processH1(node *html.Node) string {
+	return processElement(
+		"H1",
+		node,
+	)
+}
+
+func processH2(node *html.Node) string {
+	return processElement(
+		"H2",
+		node,
+	)
+}
+
+func processH3(node *html.Node) string {
+	return processElement(
+		"H3",
+		node,
+	)
+}
+
+func processH4(node *html.Node) string {
+	return processElement(
+		"H4",
+		node,
+	)
+}
+
+func processH5(node *html.Node) string {
+	return processElement(
+		"H5",
+		node,
+	)
+}
+
+func processH6(node *html.Node) string {
+	return processElement(
+		"H6",
+		node,
+	)
+}
+
+func processImg(node *html.Node) string {
+	return processElement(
+		"Img",
+		node,
 	)
 }
 
 func processListItem(node *html.Node) string {
-	return hxhelpers.Sprintf(
-		"\nhx.Li(\n%s ,\nhx.Text(%s),\n)\n",
+	return processElement(
+		"Li",
+		node,
+	)
+}
 
-		mapNodesAttributes(
-			extractAttributes(node),
-		),
-		`"`+strings.TrimSpace(extractText(node))+`"`,
+func processP(node *html.Node) string {
+	return processElement(
+		"P",
+		node,
 	)
 }
 
 func processSpan(node *html.Node) string {
-	return hxhelpers.Sprintf(
-		"\nhx.Span(\n%s ,\nhx.Text(%s),\n)\n",
-
-		mapNodesAttributes(
-			extractAttributes(node),
-		),
-		`"`+strings.TrimSpace(extractText(node))+`"`,
+	return processElement(
+		"Span",
+		node,
 	)
 }
 
 func processNav(node *html.Node) string {
-	return hxhelpers.Sprintf(
-		"\nhx.Nav(\n%s ,\nhx.Text(%s),\n)\n",
-
-		mapNodesAttributes(
-			extractAttributes(node),
-		),
-		`"`+strings.TrimSpace(extractText(node))+`"`,
+	return processElement(
+		"Nav",
+		node,
 	)
 }
 
 func processOrderedList(node *html.Node) string {
-	return hxhelpers.Sprintf(
-		"\nhx.Ol(\n%s ,\nhx.Text(%s),\n)\n",
-
-		mapNodesAttributes(
-			extractAttributes(node),
-		),
-		`"`+strings.TrimSpace(extractText(node))+`"`,
+	return processElement(
+		"Ol",
+		node,
 	)
 }

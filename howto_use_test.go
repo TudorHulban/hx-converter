@@ -17,7 +17,7 @@ func TestHowToUse(t *testing.T) {
 	<a rel="noopener noreferrer" href="#" title="Back to homepage" class="breadcrumb-link">Home</a>
 	</li>
 	<li class="breadcrumb-item">
-	<span class="breadcrumb-separator">/</span>
+	<span class="breadcrumb-separator">Text</span>
 	<a rel="noopener noreferrer" href="#" class="breadcrumb-link">Parent</a>
 	</li>
 	`
@@ -35,7 +35,7 @@ func TestHowToUse(t *testing.T) {
 	)
 }
 
-func TestHowToUseWithURL(t *testing.T) {
+func TestWithURL(t *testing.T) {
 	testURL := "https://example.com"
 
 	parsedURL, err := url.ParseRequestURI(testURL)

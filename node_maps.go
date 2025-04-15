@@ -10,19 +10,25 @@ func mapNodeAttribute(nodeKey, nodeValue string) string {
 	switch nodeKey {
 	case "class":
 		return hxhelpers.Sprintf(
-			`hx.AttrClass("%s")`,
+			`%s.AttrClass("%s")`,
+
+			_PackagePrimitives,
 			nodeValue,
 		)
 
 	case "href":
 		return hxhelpers.Sprintf(
-			`hx.Href("%s")`,
+			`%s.Href("%s")`,
+
+			_PackagePrimitives,
 			nodeValue,
 		)
 
 	default:
 		return hxhelpers.Sprintf(
-			`hx.AttrWithValue("%s","%s")`,
+			`%s.AttrWithValue("%s","%s")`,
+
+			_PackagePrimitives,
 			nodeKey,
 			nodeValue,
 		)
