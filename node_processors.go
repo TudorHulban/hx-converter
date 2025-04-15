@@ -9,7 +9,7 @@ func processElement(elName string, node *html.Node) string {
 	return hxhelpers.Sprintf(
 		"\n%s.%s(\n%s,\n),",
 
-		_PackagePrimitives,
+		_PackageHTML,
 		elName,
 		mapNodesAttributes(
 			extractAttributes(node),

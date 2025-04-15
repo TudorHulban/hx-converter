@@ -20,7 +20,7 @@ func mapNodeAttribute(nodeKey, nodeValue string) string {
 		return hxhelpers.Sprintf(
 			`%s.Href("%s")`,
 
-			_PackagePrimitives,
+			_PackageHTML,
 			nodeValue,
 		)
 
